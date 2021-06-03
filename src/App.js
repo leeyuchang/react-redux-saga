@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import Counter from './components/Counter'
+import { connect } from 'react-redux'
+import { increase, decrease } from './modules/counter'
 
-function App() {
+function App(props) {
+  const handleCountUP = () => props.countUp('hello')
+  const handleCountDown = () => props.countDown('world')
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Counter
+          onCountUp={handleCountUP}
+          onCountDown={handleCountDown}
+          count={props.count}
+        />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default connect(
+  (state) => ({ count: state }),
+  (dispatch) => ({
+    countUp: (msg) => dispatch(increase(msg)),
+    countDown: (msg) => dispatch(decrease(msg)),
+  }),
+)(App)
